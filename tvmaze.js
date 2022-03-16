@@ -3,8 +3,9 @@
 const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
-const API_URL = "http://api.tvmaze.com/search/shows/";
+const API_URL = "http://api.tvmaze.com/";
 const DEFAULT_IMG = "https://tinyurl.com/tv-missing";
+let showId = null;
 
 
 /** Given a search term, search for tv shows that match that query.
@@ -19,17 +20,22 @@ const DEFAULT_IMG = "https://tinyurl.com/tv-missing";
  */
 async function getShowsByTerm(searchTerm) {
 
+  const apiExt = "search/shows/";
+
   const result = await axios.get(
-    API_URL, { params: { q: searchTerm } });
+    API_URL + apiExt, { params: { q: searchTerm } });
 
   const showData = result.data[0].show;
 
   const id = showData.id;
+  showId = id;
+
   const name = showData.name;
   const summary = showData.summary;
 
   let image = showData.image.medium;
   (!image) ? image = DEFAULT_IMG : image;
+
 
   return [{ id, name, summary, image }];
 }
@@ -61,6 +67,7 @@ function populateShows(shows) {
 
     $showsList.append($show);
   }
+
 }
 
 
@@ -86,8 +93,39 @@ $searchForm.on("submit", async function (evt) {
  *      { id, name, season, number }
  */
 
-// async function getEpisodesOfShow(id) { }
+async function getEpisodesOfShow(show) {
+
+  let apiEpisodesUrl = `shows/${show}/episodes`
+
+  const result = await axios.get(API_URL + apiEpisodesUrl);
+
+  let episodes = [];
+
+  for(let episode of result.data){
+
+    const id = episode.id;
+    const name = episode.name;
+    const season = episode.season;
+    const number = episode.number;
+
+    episodes.push({id, name, season, number});
+  }
+
+  return episodes;
+
+ }
+
+
+
+
+ $showsList.on("click", $("<button>"), async function () {
+
+  await getEpisodesOfShow(showId);
+});
+
 
 /** Write a clear docstring for this function... */
 
-// function populateEpisodes(episodes) { }
+function populateEpisodes(episodes) {
+
+}
