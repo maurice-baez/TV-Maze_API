@@ -27,8 +27,11 @@ async function getShowsByTerm(searchTerm) {
   const name = showData.name;
   const summary = showData.summary;
   const image = showData.image.medium;
+  const defaultIMG = "https://tinyurl.com/tv-missing";
 
-  return [{ id, name, summary, image }];
+  (!image) ? image = defaultIMG : image;
+
+  return [{ id, name, summary, image}];
 }
 
 
