@@ -4,6 +4,7 @@ const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
 const API_URL = "http://api.tvmaze.com/search/shows/";
+const DEFAULT_IMG = "https://tinyurl.com/tv-missing";
 
 
 /** Given a search term, search for tv shows that match that query.
@@ -17,8 +18,8 @@ const API_URL = "http://api.tvmaze.com/search/shows/";
  * [{id: name: summary: image:}]
  */
 async function getShowsByTerm(searchTerm) {
-  // ADD: Remove placeholder & make request to TVMaze search shows API.
-  let result = await axios.get(
+
+  const result = await axios.get(
     API_URL, { params: { q: searchTerm } });
 
   const showData = result.data[0].show;
@@ -26,12 +27,11 @@ async function getShowsByTerm(searchTerm) {
   const id = showData.id;
   const name = showData.name;
   const summary = showData.summary;
-  const image = showData.image.medium;
-  const defaultIMG = "https://tinyurl.com/tv-missing";
 
-  (!image) ? image = defaultIMG : image;
+  let image = showData.image.medium;
+  (!image) ? image = DEFAULT_IMG : image;
 
-  return [{ id, name, summary, image}];
+  return [{ id, name, summary, image }];
 }
 
 
