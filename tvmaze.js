@@ -21,12 +21,12 @@ async function getShowsByTerm(searchTerm) {
   let result = await axios.get(
     API_URL, { params: { q: searchTerm } });
 
-  const showData = result.data[0];
+  const showData = result.data[0].show;
 
-  const id = showData.show.id;
-  const name = showData.show.name;
-  const summary = showData.show.summary;
-  const image = showData.show.image.medium;
+  const id = showData.id;
+  const name = showData.name;
+  const summary = showData.summary;
+  const image = showData.image.medium;
 
   return [{ id, name, summary, image }];
 }
