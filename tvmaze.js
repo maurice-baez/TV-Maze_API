@@ -52,7 +52,7 @@ function populateShows(shows) {
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
              <div><small>${show.summary}</small></div>
-             <button class="btn btn-outline-light btn-sm Show-getEpisodes">
+             <button data-show-episodes="${show.id}" class="btn btn-outline-light btn-sm Show-getEpisodes">
                Episodes
              </button>
            </div>
@@ -82,6 +82,8 @@ $searchForm.on("submit", async function (evt) {
 });
 
 
+
+
 /** Given a show ID, get from API and return (promise) array of episodes:
  *      { id, name, season, number } */
 async function getEpisodesOfShow(show) {
@@ -102,7 +104,7 @@ async function getEpisodesOfShow(show) {
 
 /** Take array of episode objects, and append to DOM */
 function populateEpisodes(episodes) {
-  $episodesList.empty();
+  // $episodesList.empty();
 
   for (let episode of episodes) {
     const $episode = $(`
@@ -126,5 +128,8 @@ async function getEpisodesAndDisplay() {
 
 
 $showsList.on("click", $("<button>"), async function () {
+  
+  $episodesList.empty();
   await getEpisodesAndDisplay();
+
 });
